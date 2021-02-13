@@ -1,0 +1,72 @@
+---
+title: "Comprobación de Resultados"
+author: "Gabriel Morales"
+date: "12/6/2020"
+output:
+  pdf_document: default
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Datos para Regresión Múltiple
+
+Recorrido asignado | $x_{1}=$ Millas recorridas |$x_{2}=$ Cantidad de entregas | $y=$ Tiempo de recorrido(horas) 
+-------------------|---------------------------|-----------------------------|----------------------------------
+        1          |          100              |          4                  |        9.3
+        2          |          50               |          3                  |        4.8
+        3          |          100              |          4                  |        8.9
+        4          |          100              |          2                  |        6.5
+        5          |          50               |          2                  |        4.2
+        6          |          80               |          2                  |        6.2
+        7          |          75               |          3                  |        7.4
+        8          |          65               |          4                  |        6.0
+        9          |          90               |          3                  |        7.6
+        10         |          90               |          2                  |        6.1
+
+```{r}
+x1=c(100,50,100,100,50,80,75,65,90,90);
+x2=c(4,3,4,2,2,2,3,4,3,2);
+y=c(9.3,4.8,8.9,6.5,4.2,6.2,7.4,6.0,7.6,6.1);
+
+reg = lm(y~x1+x2)
+
+summary(reg)
+
+```
+
+$$ b_{0}= `r reg$coefficients[1]`$$
+$$ b_{1}= `r reg$coefficients[2]`$$
+$$ b_{2}= `r reg$coefficients[3]`$$
+
+
+## Comprobación
+
+1. Creamos una matrix con los valores x1 y x2
+```{r }
+
+x=matrix(c(1,1,1,1,1,1,1,1,1,1,100,50,100,100,50,80,75,65,90,90,4,3,4,2,2,2,3,4,3,2),
+         nrow = 10)
+# Matrix X
+x
+```
+2. Aplicamos la formula
+$$b=(X^{T}*X)^{-1}*(X^{T}*Y)$$
+
+```{r}
+b=(solve(t(x)%*%x))%*%t(x)%*%y
+
+```
+
+3. Resultados
+```{r, echo=FALSE}
+b
+```
+
+
+$$ b_{0}= `r b[1]`$$
+$$ b_{1}= `r b[2]`$$
+$$ b_{2}= `r b[3]`$$
+

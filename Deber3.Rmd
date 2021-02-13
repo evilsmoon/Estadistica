@@ -1,0 +1,382 @@
+---
+title: "Deber 3"
+author: "Aulestia Esteban, Morales Gabriel, Pizarro Anthony, Revelo Carlos"
+date: "11/24/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Ejercicio 45
+
+Dados los datos de las dos variables x y y.
+
+xi | 6 11 15 18 20
+---|---------------
+yi | 6 8 12 20 30
+
+a. A partir de estos datos obtenga una ecuación de regresión estimada.
+
+```{r}
+x=c(6, 11, 15, 18, 20)
+y=c(6, 8, 12, 20, 30)
+plot(x,y)
+#regresion lineal
+reg= lm(y~x)
+summary(reg)
+abline(reg)
+yest=reg$coefficients[1]+reg$coefficients[2]*x
+```
+
+b. Calcule los residuales.
+
+> Con el resumen de toda la ecuacion ya encontramos los residuales
+Residuals:
+Residuals:
+     1      2      3      4      5 
+ 3.498 -2.438 -4.787 -1.549  5.276 
+ otra manera de sacar los residuales 
+ 
+```{r}
+#error o residuales
+ error = y-yest
+
+```
+
+c. Trace una gráfica de residuales contra la variable independiente x. ¿Parecen satisfacerse las
+suposiciones acerca de los términos del error?
+
+```{r}
+rs= rstandard(reg)
+plot(x,rs)
+
+```
+
+> Con solo 5 observaciones es difícil determinar si se cumplen los supuestos. Sin embargo, la gráfica sugiere una curvatura en los residuos que indicaría que no se cumplen los supuestos del término de error.
+
+d. Calcule los residuales estandarizados.
+
+```{r}
+hi=influence(reg)$hat
+hi
+
+```
+
+
+e. Elabore una gráfica de residuales estandarizados contra . ¿Qué conclusión puede sacar de
+esta gráfica?
+
+```{r}
+plot(reg)
+
+```
+> El gráfico de residuos estandarizado tiene la misma forma que el gráfico de residuos original. La curvatura observada indica que los supuestos sobre el término de error pueden no cumplirse.
+
+## Ejercicio 46
+
+En un estudio de regresión se emplearon los datos siguientes.
+
+
+Observación | $x_{i}$ | $i_{i}$ 
+------------|---------|--------
+    1       |    2    |    4        
+    2       |    3    |    5        
+    3       |    4    |    4        
+    4       |    5    |    6        
+    5       |    7    |    4        
+    6       |    7    |    6
+    7       |    7    |    9     
+    8       |    8    |    5     
+    6       |    9    |    11     
+
+
+a. A partir de estos datos obtenga una ecuación de regresión estimada.
+```{r}
+    x = c(2,3,4,5,7,7,7,8,9)
+    y = c(4,5,4,6,4,6,9,5,11)
+
+    reg = lm(y~x)
+
+    yest = reg$coefficients[1] + reg$coefficients[2]*x
+
+```
+
+b. Trace una gráfica de residuales. ¿Parecen satisfacerse las suposiciones del término del error?
+ 
+```{r}
+ rs= rstandard(reg)
+ plot(x,rs)
+ 
+```
+
+> Como se puede observar en el grafico los datos de la varianza no son identicos a los valores de a la x 
+
+## Ejercicio 47
+
+A continuación se presentan datos sobre los gastos en publicidad y los ingresos (en miles de dólares) del restaurante Cuatro Estaciones.
+
+Gastos en publicidad | Ingresos
+---------------------|-----------
+        1            |  19
+        2            |  32
+        4            |  44
+        6            |  40
+        10           |  52
+        14           |  53
+        20           |  54
+
+a. Sea x igual gastos en publicidad y y igual a ingresos. Utilice el método de mínimos cuadrados para obtener una línea recta que aproxime la relación entre las dos variables.
+
+```{r}
+#gastos en publicidad 
+x=c(1,2,4,6,10,14,20)
+#ingresos
+y=c(19,32,44,40,52,53,54)
+reg=lm(y~x)
+summary(reg)
+plot(x,y)
+abline(reg,col="green")
+```
+
+b. Empleando como nivel de significancia 0.05, pruebe si los ingresos y los gastos en publicidad están relacionados.
+
+```{r}
+i = c(1:length(x))
+xmed = mean(x) 
+ymed = mean(y) 
+x_xmed = x-xmed
+y_ymed = y-ymed 
+prod = x_xmed*y_ymed 
+s1 = sum(prod) 
+cuad = x_xmed^2 
+s2 = sum(cuad) 
+b1 = s1/s2 
+b0 = ymed-b1*xmed 
+yest=  b0+b1*x
+error = y-yest 
+sce = sum((error)^2) 
+stc = sum((y_ymed)^2)
+scr = stc-sce
+n = length(x)
+ecm = sce/(n-2) 
+s = sqrt(ecm) 
+cmr = scr/1
+f = cmr/ecm 
+print(f)
+n = length (i) 
+gl = n-2 
+sb1 = s/sqrt(s2) 
+t = b1/sb1 #estadistico de prueba t 
+alfa = 0.05 
+area_t = alfa/2 
+
+p_value_t = 2*pt(-abs(t),df=gl) 
+if (p_value_t < alfa) { 
+  print ("Rechazo Hipotesis Nula - Prueba t") #si se cumple que es menor, entonces muestra el mensaje rechazo la hipotesis nula  
+} else {  
+  print ("Acepto Hipotesis Nula - Prueba t") #en caso contrario  muestra el mensaje rechazo la hipotesis nula  
+} 
+print(t)
+```
+
+c. Elabore una gráfica de residuales de y-yest contra yest. Use el resultado del inciso a) para obtener los valores de yest .
+
+```{r}
+yest=  b0+b1*x
+i = c(1:length(x))
+eje = rep(0, length(i)) 
+plot(yest,error, col="blue",main="Residuales vs. Y Estimada")
+lines(yest,eje,type="c", col="black")
+```
+
+d. ¿Qué conclusiones se pueden sacar del análisis de residuales? ¿Se puede usar este modelo o se debe buscar uno mejor?
+
+> La grafica nos dice que la bonda de ajuste nos hace discutir si existe una relacion lineal, por lo tanto es riesgoso extrapolar con datos a los propuestos
+
+## Ejercicio 49
+
+American Depository Receipts (ADR) son certificados que cotizan en la bolsa de Nueva York y que representan acciones de empresas extranjeras que mantienen un depósito en un banco de su propio país. En la tabla siguiente se presenta la relación precio/ganancia (P/G) y el porcentaje de rendimiento de la inversión (ROE, por sus siglas en inglés), de 10 empresas hindúes que es probable que sean nuevos (Bloomberg Personal Finance, abril 2000).
+
+ROE     | P/G
+--------|---------
+6.43    | 36.88
+13.49   | 27.03
+14.04   | 10.83
+20.67   | 5.15
+22.74   | 13.35
+46.23   | 95.59
+28.90   | 54.85
+54.01   | 189.21
+28.02   | 75.86
+27.04   | 13.17
+
+a. Emplee un paquete de software para obtener una ecuación de regresión estimada que relacione
+y = P/G y x = ROE.
+
+```{r}
+POE = c(6.43,13.49,14.04,20.67,22.74,46.23,28.90,54.01,28.02,27.04)
+PG = c(36.88,27.03,10.83,5.15,13.35,95.59,54.85,189.21,75.86,13.17)
+plot(POE,PG)
+reg = lm(POE~PG)
+summary(reg)
+yest = reg$coefficients[1]+reg$coefficients[2]*POE
+```
+
+b. Construya una gráfica de residuales contra la variable independiente.
+
+```{r}
+RES = influence(reg)$hat
+print(RES)
+plot(POE,RES)
+```
+
+c. A la luz de la gráfica de residuales, ¿parecen razonables las suposiciones acerca de los términos del error y de la forma del modelo?
+
+> Si ya que forman una linea adecuada, solo el ultimo punto afecta en la grafica que se encuentra en 0.7 mientras que las demas se mantienen en el rango de 0.2, asi que tenemos un outlier.
+
+## Ejercicio 50
+
+Considérense los datos siguientes para las variables x y y.
+
+xi | 135 110 130 145 175 160 120
+---|------------------------------
+yi | 145 100 120 120 130 130 110
+
+a. Calcule los residuales estandarizados de estos datos. ¿Hay entre los datos alguna observación
+atípica? Explique.
+```{r}
+x=c(135, 110, 130, 145, 175, 160, 120)
+y=c(145, 100, 120, 120, 130, 130, 110)
+
+reg= lm(y~x)
+hi=influence(reg)$hat
+hi
+
+```
+> Viendo los datos residuales estandarizados vemos que el dato 2 y el dato 5 son datos atipicos porque exceden el lumbral que es hasta 0.2 
+
+b. Haga una gráfica de residuales estandarizados contra . ¿Se observa en esta gráfica la presencia de alguna observación atípica?
+
+```{r}
+plot(reg)
+```
+
+> Vemos que en el 4 grafico que es de los residuales estandarizados, vemos que el dato 1 es el verdadero dato atipico porque se aleja del cento pero tmb vemos que el dato 2 y dato 5 no estan tan aeljados como lo hubieramos predicho en el literal a
+
+c. Con estos datos elabore un diagrama de dispersión. ¿Se observa en el diagrama de dispersión
+la presencia de alguna observación atípica
+
+```{r}
+plot(reg)
+```
+
+> Como vemos en el segundo grafico que es el diagrama de dispersion nos da a notar que el dato 1 es el dato atipico y no los datos que habiamos predicho en el literal a 
+
+ 
+
+## Ejercicio 51
+Considérense los datos siguientes para las variables x y y.
+
+$x_{i}$| $y_{y}$
+-------|--------
+ 4     |   12
+ 5     |   14
+ 7     |   16
+ 8     |   15
+ 10    |   18 
+ 12    |   20 
+ 12    |   24  
+ 22    |   19
+ 
+a. Calcule los residuales estandarizados de estos datos. ¿Hay entre los datos alguna observación atípica? Explique.
+
+```{r}
+
+ x_i = c(4,5,7,8,10,12,12,22)
+ y_i = c(12,14,16,15,18,20,24,19)
+ n = length(x_i)
+ 
+ reg_51 = lm(y_i~x_i)
+ h =influence(reg_51)$hat
+ plot(h)
+```
+
+> Como podemos observar en la grafica el dato 8 son datos atipicos porque exceden el lumbral que es hasta 0.2
+
+ 
+b. Calcule las observaciones de influencia que haya en estos datos. Entre estos datos, ¿parece haber alguna observación influyente? Explique.
+
+```{r}
+hi=influence(reg_51)$hat
+
+lum= 6/n
+
+hi>lum
+
+```
+> Como podemos observr en el dato 8 es TRUE con lo que podemos llegar que hay un dato atipico
+
+c. Con estos datos elabore un diagrama de dispersión. ¿Se observa en el diagrama de dispersión la presencia de alguna observación atípica? Explique
+
+```{r,echo=FALSE}
+plot(y_i~x_i,col="black")
+
+```
+
+> En el diagrama de dispercion el unico punto donde se puede observar un dato atípico se encuentra  coordenadas de x,y(`r x_i[8]`, `r y_i[8]`)
+
+
+## Ejercicio 52
+
+Los datos siguientes muestran los gastos (en millones de $) y los envíos en bbls. (millones) de 10 importantes marcas de cerveza.
+
+x    |   y 
+-----|------
+120.0|  36.3
+68.7 |  20.7
+100.1|  15.9
+76.6 |  13.2
+8.7  |  8.1
+0.1  |  7.1
+21.5 |  5.6
+1.4  |  4.4
+5.3  |  4.3
+1.7  |  4.3
+
+a. Con estos datos obtenga una ecuación de regresión estimada.
+
+```{r}
+x=c(120.0,68.7,100.1,76.6,8.7,0.1,21.5,1.4,5.3,1.7)
+y=c(36.3,20.7,15.9,13.2,8.1,7.1,5.6,4.4,4.3,4.3)
+
+#Calculo de la ecuacion de regresion estimada 
+xmed = mean(x) 
+ymed = mean(y) 
+x_xmed = x-xmed
+y_ymed = y-ymed 
+prod = x_xmed*y_ymed 
+s1 = sum(prod) 
+cuad = x_xmed^2 
+s2 = sum(cuad) 
+b1 = s1/s2 
+b0 = ymed-b1*xmed 
+#regresión estimada
+yest = b0+b1*x 
+plot(x,y, col="red")
+lines(x,yest,type="l",col="green") 
+```
+
+b. Emplee el análisis residual para hallar observaciones atípicas u observaciones influyentes.
+Resuma sus hallazgos y conclusiones.
+
+```{r}
+reg=lm(y~x)
+summary(reg)
+influence(reg)
+gh=influence(reg)$hat
+print(gh)
+```
+
+> Identificando la grafica con los resultas se puede determinar que existe una observacion atipica  en el 1er coeficente, y si se lo elimina el modelo sera a un mas significativo.
+

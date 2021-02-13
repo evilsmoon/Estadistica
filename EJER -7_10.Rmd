@@ -1,0 +1,309 @@
+---
+title: "ejer_7_10"
+author: "GABRIEL"
+date: "12/2/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejercicio 7
+
+Los diseñadores de mochilas usan materiales exóticos como supernailon Derlin, polietileno de alta densidad, aluminio para aviones o espumas termo-moldeadas para hacer que las mochilas sean más confortables y que el peso se distribuya uniformemente eliminándose así los puntos de mayor presión. En los datos siguientes se proporciona capacidad (en pulgadas cúbicas), evaluación del confort, y precio de 10 mochilas probadas por Outside Magazine. El confort está medido con una escala del 1 al 5, en la que 1 denota un confort mínimo y 5 un confort excelente. (Outside Buyer’s Guide, 2001).
+
+
+Fabricante y modelo             |Capacidad| Confort | Precio 
+--------------------------------|---------|---------|---------
+Camp Trails Paragon II          |  4330   |   2     |  $190          
+EMS 5500                        |  5500   |   3     |  219
+Lowe Alpomayo 90+20             |  5500   |   4     |  249
+Marmot Muir                     |  4700   |   3     |  249
+Kelly Bigfoot 5200              |  5200   |   4     |  250
+Gregory Whitney                 |  5500   |   4     |  340
+Osprey 75                       |  4700   |   4     |  389
+Arc'Teryx Bora 95               |  5500   |   5     |  395
+Dana Design Terraplane LTW      |  5800   |   5     |  439
+The Works @ Mystery Ranch Jaz   |  5000   |   5     |  525  
+
+
+a. Obtenga la ecuación de regresión estimada que permita predecir el precio de una mochila, dada su capacidad y la evaluación de su confort.
+
+```{r}
+x1 = c(4330,5500,5500,4700,5200,5500,4700,5500,5800,5000) ## Capacidad
+x2 = c(2,3,4,3,4,4,4,5,5,5)                               ## Confort
+y  = c( 190,219,249,249,250,340,389,395,439,525 )         ## Precio
+
+reg = lm(y~x1+x2)
+yest = reg$coefficients[1]+reg$coefficients[2]*x1+reg$coefficients[3]*x2
+
+yest
+```
+
+$\hat{y}=$ `r reg$coefficients[1]`  `r reg$coefficients[2]` $*x1+$ `r reg$coefficients[3]` $*x2$
+
+b. Interprete b 1 y b 2 .
+
+$b_{1}=$ `r reg$coefficients[2]`
+
+$b_{2}=$ `r reg$coefficients[3]`
+
+c. Diga cuál será el precio de una mochila cuya capacidad sea 4500 pulgadas cúbicas y la evaluación de su confort sea 4.
+
+```{r}
+yest = reg$coefficients[1]+reg$coefficients[2]*4500+reg$coefficients[3]*4
+
+```
+
+$\hat{y}=$ `r reg$coefficients[1]`  `r reg$coefficients[2]` $*$ `r 4500` $+$ `r reg$coefficients[3]` $*$ `r 4`
+
+$\hat{y}=$ `r reg$coefficients[1]+reg$coefficients[2]*4500+reg$coefficients[3]*4`
+
+
+## Ejercicio 10
+
+La Nacional Basketball Association (NBA) lleva un registro de diversos datos estadísticos de cada 
+equipo. Cuatro de estos datos estadísticos son la proporción de juegos ganados (PCT), la proporción de 
+anotaciones de campo (FG%), la proporción de tiros de tres puntos hechos por el equipo
+contrario (Opp 3 Pt%) y la cantidad de recuperaciones hechas por el equipo contrario (Opp TO).
+Los siguientes datos muestran los valores de estas estadísticas para los 29 equipos de la
+NBA en una fracción de la temporada 2004 (www.nba.com, enero 3, 2004)
+
+
+Equipo         | PCT | FG$%$  | Opp 3Pt%| Opp TO
+---------------|-----|--------|---------|---------
+Atlanta        |0.265|  0.435 | 0.346   | 13.206          
+Boston         |0.471|  0.449 | 0.369   | 16.176          
+Chicago        |0.313|  0.417 | 0.372   | 15.031          
+Cleveland      |0.303|  0.438 | 0.345   | 12.515          
+Dallas         |0.581|  0.439 | 0.332   | 15.000          
+Denver         |0.606|  0.431 | 0.366   | 17.818          
+Detroit        |0.606|  0.423 | 0.262   | 15.788          
+Golden State   |0.452|  0.445 | 0.384   | 14.290          
+Houston        |0.548|  0.426 | 0.324   | 13.161          
+Indiana        |0.706|  0.428 | 0.317   | 15.647          
+L.A. Clippers  |0.464|  0.424 | 0.326   | 14.357          
+L.A. Lakers    |0.724|  0.465 | 0.323   | 16.000          
+Memphis        |0.485|  0.432 | 0.358   | 17.848          
+Miami          |0.424|  0.410 | 0.369   | 14.970          
+Milwaukee      |0.500|  0.438 | 0.349   | 14.750          
+Minnesota      |0.677|  0.473 | 0.348   | 13.839
+Nueva Jersey   |0.563|  0.435 | 0.338   | 17.063
+Nueva Orleáns  |0.636|  0.421 | 0.330   | 16.909
+Neuva York     |0.412|  0.442 | 0.330   | 13.588
+Orlando        |0.242|  0.417 | 0.360   | 14.242
+Philadelphia   |0.438|  0.428 | 0.364   | 16.938
+Phoenix        |0.364|  0.438 | 0.326   | 16.515
+Portland       |0.484|  0.447 | 0.367   | 12.548
+Sacramento     |0.724|  0.466 | 0.327   | 15.207
+San Antonio    |0.688|  0.429 | 0.293   | 15.344
+Seattle        |0.533|  0.436 | 0.350   | 16.767
+Toronto        |0.516|  0.424 | 0.314   | 14.129
+Utah           |0.531|  0.456 | 0.368   | 15.469
+Washington     |0.300|  0.411 | 0.341   | 16.133
+
+
+
+a. Obtenga una ecuación de regresión estimada que sirva para predecir la proporción de juegos ganados dada la proporción de anotaciones de campo del equipo.
+
+```{r}
+y = c(0.265,0.471,0.313,0.303,0.581,0.606,0.606,
+      0.452,0.548,0.706,0.464,0.724,0.485,0.424,
+      0.500,0.677,0.563,0.636,0.412,0.242,0.438,
+      0.364,0.484,0.724,0.688,0.533,0.516,0.531,0.300)
+
+x1_10 = c(0.435,0.449,0.417,0.438,0.439,0.431,0.423,
+      0.445,0.426,0.428,0.424,0.465,0.432,0.410,
+      0.438,0.473,0.435,0.421,0.442,0.417,0.428,
+      0.438,0.447,0.466,0.429,0.436,0.424,0.456,0.411)
+
+x2_10 = c(0.346,0.369,0.372,0.345,0.332,0.366,0.262,
+      0.384,0.324,0.317,0.326,0.323,0.358,0.369,
+      0.349,0.348,0.338,0.330,0.330,0.360,0.364,
+      0.326,0.367,0.327,0.293,0.350,0.314,0.368,0.341)
+
+x3_10 = c(13.206,16.176,15.031,12.515,15.000,17.818,
+      15.788,14.290,13.161,15.647,14.357,16.000,
+      17.848,14.970,14.750,13.839,17.063,16.909,
+      13.588,14.242,16.938,16.515,12.548,15.207,
+      15.344,16.767,14.129,15.469,16.133)      
+
+reg_1 = lm(y~x1_10)
+
+yest_10 = reg_1$coefficients[1]+reg_1$coefficients[2]*x1_10
+
+yest_10
+```
+
+$\hat{y}=$ `r reg_1$coefficients[1]` $+$ `r reg_1$coefficients[2]` $*x$
+
+
+b. Interprete la pendiente de la ecuación de regresión estimada obtenida en el inciso a).
+
+```{r}
+reg_1 = lm(y~x1_10)
+plot(y~x1_10)
+abline(reg_1)
+
+```
+
+
+c. Obtenga una ecuación de regresión estimada que sirva para predecir la proporción de juegos ganados dada la proporción de anotaciones de campo del equipo, la proporción de tiros de tres puntos hechos por el equipo contrario y la proporción de recuperaciones hechas por el equipo contrario.
+
+```{r}
+reg = lm(y~x1_10+x2_10+x3_10)
+
+yest = reg$coefficients[1]+reg$coefficients[2]*x1_10+
+  reg$coefficients[3]*x2_10+reg$coefficients[4]*x3_10
+
+yest
+```
+
+$\hat{y}=$ `r reg$coefficients[1]` $+$  `r reg$coefficients[2]` $*x_{1}$ `r reg$coefficients[3]` $*x_{2}+$ `r reg$coefficients[4]` $*x_{3}$
+
+d. Analice las implicaciones prácticas de la ecuación de regresión estimada obtenida en el inciso c).
+
+Aumenta FG% , disminuye Opp 3 Pt%  aumenta Opp TO
+
+
+e. Estime la proporción de juegos ganados por un equipo para el que los valores de las tres 
+variables independientes son: FG% = 0.45, Opp 3 Pt% =0.34 y Opp TO = 17.
+
+```{r}
+reg = lm(y~x1_10+x2_10+x3_10)
+yest = reg$coefficients[1]+reg$coefficients[2]*0.45+reg$coefficients[3]*0.34+reg$coefficients[4]*17
+
+```
+$\hat{y}=$ `r reg$coefficients[1]` $+$  `r reg$coefficients[2]` $*0.45$ `r reg$coefficients[3]` $*0.34+$ `r reg$coefficients[4]` $*17$
+
+$\hat{y}=$ `r reg$coefficients[1]+reg$coefficients[2]*0.45+reg$coefficients[3]*0.34+reg$coefficients[4]*17`
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ 
